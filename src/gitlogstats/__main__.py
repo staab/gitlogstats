@@ -46,6 +46,9 @@ def main():
         help="the public URL of the repository whose logs to parse",
     )
     group.add_argument(
+        "-b", "--branch", help="the branch to parse",
+    )
+    group.add_argument(
         "-rf",
         "--repofile",
         help="the path to simple text file with a list of repository URLs to parse",
@@ -134,6 +137,11 @@ def main():
             os.chdir(repo_dir)  # navigate into this repository's directory
             subprocess.run(
                 ["git", "pull"], capture_output=True, check=True
+            )  # clone the code from github
+
+        if args.branch:
+            subprocess.run(
+                ["git", "checkout", args.branch], capture_output=True, check=True
             )  # clone the code from github
 
         git_logs_parser = GitLogsParser(
